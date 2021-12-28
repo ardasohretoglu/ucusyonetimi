@@ -43,7 +43,7 @@
                         </h5>
 
                         <v-btn @click="sortForPrice()" outlined text tile elevation="0" class="mx-5"> Ekonomi Ücreti </v-btn>
-                        <v-btn  outlined text tile elevation="0"> Kalkış Saati </v-btn>
+                        <v-btn @click="sortForDate()" outlined text tile elevation="0"> Kalkış Saati </v-btn>
                         
                     </v-system-bar>
                     <v-row v-for="(flight , index) in flights" :key="index">
@@ -293,12 +293,14 @@ export default {
             
         },
         sortForPrice(){
-            
-
                 this.flights = this.flights.sort((item1,item2) => {
                     return item1.fareCategories.ECONOMY.subcategories[0].price.amount - item2.fareCategories.ECONOMY.subcategories[0].price.amount
                 })
-
+        },
+        sortForDate(){
+            this.flights = this.flights.sort((item1,item2) => {
+                    return new Date(`July 20, 2021 ${item1.arrivalDateTimeDisplay}:00 `) - new Date(`July 20, 2021 ${item2.arrivalDateTimeDisplay}:00 `)
+                })
         }
     },
 
