@@ -1,10 +1,9 @@
 <template>
   <v-app>
-    
-    <v-main class="app-background">
+    <v-main  :style="currentRouteName == 'Home' ? 'background-color: #063048;' : 'background-color: #FFFF;' ">
        <v-container>
     <v-row >
-      <v-col cols="12" style="color:#FFFFFF">
+      <v-col cols="12" :style="currentRouteName == 'Home' ? 'color: #FFFFFF;' : 'color: #000000;' " >
         
         <div class="page-header">
           <div>
@@ -24,11 +23,6 @@
       </v-col>
     </v-row>
   </v-container>
-        
-        
-
-      
-      
       <router-view/>
     </v-main>
   </v-app>
@@ -42,13 +36,17 @@ export default {
   data: () => ({
     
   }),
+
+  computed: {
+    currentRouteName() {
+        return this.$route.name;
+    }
+}
+
 };
 </script>
 
 <style scoped>
-.app-background{
-  background-color: #063048;
-}
 .page-header{
   display: flex;
   justify-content: space-between;

@@ -5,16 +5,20 @@
         
         <div class="form">
           <v-text-field
-            label="Outlined"
+            label="Nereden"
             solo
             elevation="0"
             class="ma-1"
+            prepend-inner-icon="mdi-airplane-takeoff"
+            v-model="takeOff"
           ></v-text-field>
           <v-text-field
-          class="ma-1"
-            label="Outlined"
+            class="ma-1"
+            label="Nereye"
             solo
             elevation="0"
+            prepend-inner-icon="mdi-airplane-landing"
+            v-model="landing"
           ></v-text-field>
           
           <button class="form-buttons ml-5">
@@ -35,7 +39,6 @@
           <!-- MENU START -->
            <div class="text-center">
               <v-menu
-                v-model="menu"
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-y
@@ -51,7 +54,7 @@
                       right
                       class="mr-3"
                     >
-                      mdi-human-male  
+                      {{ (selectCount == 0 || selectCount == 1) ? 'mdi-human-male ' : 'mdi-human-male-male ' }}  
                     </v-icon>
                     <span class="selected-count" >
                       {{selectCount}}
@@ -63,18 +66,13 @@
                 </template>
 
                 <v-card style="padding:20px">
-                  <v-list>
-                    <v-list-item>
+                 
                       
 
-                      <v-list-item-content>
                         <h5 style="color:#787878">
                           Kabin ve yolcu seçimi
                         </h5>
-                      </v-list-item-content>
 
-                    </v-list-item>
-                  </v-list>
                   
                   <v-list>
                      <v-radio-group
@@ -131,21 +129,102 @@
                 </v-card>
               </v-menu>
             </div>
-        </div>
+            <!-- MENU END -->
 
+            <!-- <button class="ml-5 form-buttons"
+              @click="toListPage"
+             :disabled="!validChoiceTakeOff || !validChoicelanding"
+              style="background-color: #E81932 !important;">
+              
+                        <v-icon
+                          dark
+                          right
+                          large
+                          class="ma-1"
+                        >
+                          mdi-chevron-right 
+                        </v-icon>
+                      </button> -->
+                      <v-btn elevation="0"
+                        class="ml-3 mt-1"
+                        height="48"
+                       style="background-color: #E81932 !important;"
+                        :disabled="!validChoiceTakeOff || !validChoicelanding"
+                         @click="toListPage" 
+                         fab 
+                         tile
+                         >
+                        <v-icon
+                        
+                          color="#FFFF"
+                          right
+                          large
+                          class="ma-1"
+                        >
+                          mdi-chevron-right 
+                        </v-icon>
+                      </v-btn>
+        </div>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import flight from '../../data/flights.json'
   export default {
-    name: 'UcusSorgulama',
+    name: 'FlySearching',
 
     data: () => ({
      selectCount:0,
-     selectedClass:'econommyClass'
+     selectedClass:'econommyClass',
+     takeOff:'',
+     landing:'',
+     flight : flight.flights,
+     validChoiceTakeOff : false,
+     validChoicelanding : false,
+
+     selectedCities: []
     }),
+
+    methods:{
+      toListPage(){
+        this.$router.push({ name: "ListPage" });
+        this.selectedCities = []
+
+        this.selectedCities = [
+          {
+            originAirport: this.takeOff
+          },
+          {
+            destinationAirport: this.landing
+          }
+        ]
+        localStorage.setItem('selectedCities', JSON.stringify(this.selectedCities));
+      }
+    },
+
+    watch:{
+      takeOff:{
+        handler(val){
+          this.validChoiceTakeOff = this.flight.some(item => {
+            return item.originAirport.city.name.toUpperCase() == val.toUpperCase()
+          })
+        }
+      },
+      landing:{
+        handler(val){
+          this.validChoicelanding = this.flight.some(item => {
+            return item.destinationAirport.city.name.toUpperCase() == val.toUpperCase()
+          })
+        }
+      }
+    },
+
+    mounted(){
+      // this.flight = JSON.parse(this.flight.flights)
+    }
+
   }
 </script>
 <style scoped>
@@ -166,16 +245,7 @@
 .form-buttons:hover{
   background-color: #01245c88;
 }
-.form-buttons-disabled{
-  background-color: #686868;
-  display: flex;
-  align-items: center;
-  color: #ffff;
-  height: 50px;
-  padding: 1px;
-  margin-top: 3px;
-  cursor: auto;
-}
+
 .select-button{
   width: 90px;
   display: block !important;

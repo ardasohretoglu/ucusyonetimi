@@ -1,15 +1,15 @@
 <template>
-  <ucus-sorgulama />
+  <fly-searching class="" />
 </template>
 
 <script>
-  import ucusSorgulama from '../components/ucusSorgulama.vue'
+  import flySearching from '../components/flySearching.vue'
 
   export default {
     name: 'Home',
 
     components: {
-      ucusSorgulama,
+      flySearching,
     },
   }
 </script>
