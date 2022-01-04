@@ -7,7 +7,7 @@
         
         <div class="page-header">
           <div>
-            <h4>sohretoglulines.com</h4>
+            <h4>sohretogluairlines.com</h4>
           </div>
           <div>
             <span class="search">
